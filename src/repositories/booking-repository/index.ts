@@ -2,12 +2,20 @@ import { prisma } from "@/config";
 import dayjs from "dayjs";
 
 async function getBooking(userId: number){
-    const result = prisma.booking.findFirst({
+    const book = prisma.booking.findFirst({
         where:{
             userId: userId
         }
     })
-    return(result)
+    const room = prisma.room.findFirst({
+        where:{
+            id: (await book).roomId
+        }
+    })
+    return({
+        id: (await book).id,
+        room: await room
+    })
 }
 
 async function newBooking(userId: number, roomId: number){
