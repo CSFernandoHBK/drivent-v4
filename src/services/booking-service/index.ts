@@ -1,12 +1,12 @@
 import bookingRepository from "@/repositories/booking-repository"
 
-async function getBooking(){
-    const result = await bookingRepository.getBooking()
+async function getBooking(userId: number){
+    const result = await bookingRepository.getBooking(userId)
     return(result)
 }
 
-async function newBooking(){
-    const result = await bookingRepository.newBooking();
+async function newBooking(userId: number, roomId: number){
+    const result = await bookingRepository.newBooking(userId, roomId);
     return(result)
 }
 

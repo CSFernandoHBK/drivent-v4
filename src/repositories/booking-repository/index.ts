@@ -1,12 +1,23 @@
-import { prisma } from "@prisma/client"
+import { prisma } from "@/config";
+import dayjs from "dayjs";
 
-async function getBooking(){
-    const result = ""
+async function getBooking(userId: number){
+    const result = prisma.booking.findFirst({
+        where:{
+            userId: userId
+        }
+    })
     return(result)
 }
 
-async function newBooking(){
-    const result = ""
+async function newBooking(userId: number, roomId: number){
+    const result = prisma.booking.create({
+        data:{
+            userId: userId,
+            roomId: roomId,
+            updatedAt: dayjs().toDate()
+        }
+    })
     return(result)
 }
 
