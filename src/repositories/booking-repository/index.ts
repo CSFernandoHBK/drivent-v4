@@ -1,20 +1,26 @@
 import { prisma } from "@/config";
+import { notFoundError } from "@/errors";
 import dayjs from "dayjs";
 
 async function getBooking(userId: number){
-    const book = prisma.booking.findFirst({
+    const book = await prisma.booking.findFirst({
         where:{
             userId: userId
         }
     })
-    const room = prisma.room.findFirst({
+
+    if(!book){
+        throw notFoundError();
+    }
+
+    const room = await prisma.room.findFirst({
         where:{
-            id: (await book).roomId
+            id: book.roomId
         }
     })
     return({
-        id: (await book).id,
-        room: await room
+        id: book.id,
+        room: room
     })
 }
 
@@ -29,15 +35,24 @@ async function newBooking(userId: number, roomId: number){
     return(result)
 }
 
-async function updateBooking(){
+async function updateBooking(roomId: number){
     const result = ""
     return(result)
+}
+
+async function getBookingsByRoomId(roomId: number) {
+    return prisma.booking.findMany({
+        where:{
+            roomId: roomId
+        }
+    })
 }
 
 const bookingRepository = {
     getBooking,
     newBooking,
-    updateBooking
+    updateBooking,
+    getBookingsByRoomId
 }
 
 export default bookingRepository;
